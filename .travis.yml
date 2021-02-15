@@ -1,0 +1,2 @@
+language: r            # this works for Linux but is an error on macOS or Windows
+
