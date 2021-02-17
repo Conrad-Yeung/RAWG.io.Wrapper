@@ -1,7 +1,9 @@
 library(docstring)
 library(httr)
+library(jsonlite)
 library(dplyr)
 library(tibble)
+
 get_game_list <- function(n=40,page=1,api_key="",start_date="",end_date="",metacritic="",platform="",platform_count="",genre="",ordering=""){
   #' GET request to RAWG
   #'

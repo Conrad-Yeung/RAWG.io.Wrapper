@@ -1,3 +1,4 @@
+library(docstring)
 library(httr)
 library(jsonlite)
 library(dplyr)
@@ -25,7 +26,6 @@ get_genre_list<-function(api_key=""){
   }
   
   link <- paste("https://api.rawg.io/api/genres",cleaned_api_key,sep="")
-  print(link)
   get_link <- GET(link) #GET REQUEST
   
   raw_content <- fromJSON(content(get_link,"text",encoding="UTF-8"),simplifyVector=FALSE) #FORMAT INTO JSON
