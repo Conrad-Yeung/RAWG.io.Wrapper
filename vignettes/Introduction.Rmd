@@ -1,0 +1,299 @@
+---
+title: "Introduction"
+author: "Aamir M. Khan / Conrad Yeung"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    smart: no
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+RAWG.io.Wrapper is an API wrapper for rawg.io game database website. It allows acquiring detailed information about different games through an easy to use query interface.
+
+## Installation
+
+```{r1 eval=, message=FALSE, warning=FALSE}
+if (!require("devtools")) install.packages("devtools")
+devtools::install_github("Conrad-Yeung/RAWG.io.Wrapper")
+``` 
+
+
+## Lookup games by genres
+
+Provide a postcode to obtain all available information 
+
+```{r, message = FALSE, warning = FALSE}
+library(RAWG.io.Wrapper)
+
+API_KEY = "95731a37dcf84a638308f6f40fb01801"
+
+genres <- get_genre_list("EC1Y8LX")
+
+#overview
+str(genres)
+```
+
+There is another function that returns the same data points but returns a list and allows optional parameters
+
+```{r}
+query_result <- postcode_query("EC1Y8LX")
+
+#overview
+str(query_result)
+```
+
+This function creates a nested list with the codes for administrative district, county, ward, parish, parliamentary constituency, CCG, and NUTS.
+
+### Multiple postcodes
+
+To query two or more postcodes, use `bulk_` functions.
+
+```{r}
+pc_list <- list(postcodes = c("PR3 0SG", "M45 6GN", "EX165BL"))
+bulk_lookup_result <- bulk_postcode_lookup(pc_list)
+
+#overview
+str(bulk_lookup_result[1])
+```
+
+If you want to work with data frame then the nested list created above can be turned into a data frame
+
+```{r}
+library(purrr)
+
+bulk_list <- lapply(bulk_lookup_result, "[[", 2)
+
+bulk_df <-
+  map_dfr(bulk_list,
+          `[`,
+          c("postcode", "longitude", "latitude"))
+```
+
+Querying Scottish postcodes requires a separate function:
+
+```{r}
+scottish_lookup <- scottish_postcode_lookup("EH12NG")
+
+str(scottish_lookup)
+```
+
+
+### Outward code lookup
+
+Provide an outcode to obtain geolocation data for the centroid of the specified outcode:
+
+```{r}
+ocl <- outward_code_lookup("E1")
+
+#overview
+str(ocl)
+```
+
+## Reverse geocoding
+
+Provide latitude and longitude to obtain geographic information. Different levels of aggregation are available, i.e. postcode or outcode.
+
+### Single postcode
+
+```{r}
+rev_geo <- reverse_geocoding(0.127, 51.507)
+
+# overview
+str(rev_geo[1])
+```
+
+### Multiple postcodes
+
+To reverse geocode multiple values use the function underneath. The result is a nested list, which might be a bit intimidating, but it allows storing unequal number of elements.
+
+```{r}
+# create a list with the coordinates
+geolocations_list <- structure(
+ list(
+ geolocations = structure(
+ list(
+ longitude = c(-3.15807731271522, -1.12935802905177),
+ latitude = c(51.4799900627036, 50.7186356978817),
+ limit = c(NA, 100L),
+ radius = c(NA, 500L)),
+ .Names = c("longitude", "latitude", "limit", "radius"),
+ class = "data.frame",
+ row.names = 1:2)),
+ .Names = "geolocations")
+
+bulk_rev_geo <- bulk_reverse_geocoding(geolocations_list)
+
+bulk_rev_geo[[1]]$result[[1]]
+```
+
+The list above is not the most common way of storing files. It's more likely that a data frame will be used to store the geodata. In that case, it has to be turned into a list of a specific format required by the API:
+
+```{r}
+geolocations_df <- structure(
+  list(
+    longitude = c(-3.15807731271522, -1.12935802905177),
+    latitude = c(51.4799900627036, 50.7186356978817),
+    limit = c(NA, 100L),
+    radius = c(NA, 500L)),
+  .Names = c("longitude", "latitude", "limit", "radius"),
+  row.names = 1:2,
+  class = "data.frame")
+
+geolocations_df
+
+# turn a data frame into a list
+geolocations_df2list <- list(geolocations_df)
+
+# add a list name
+names(geolocations_df2list) <- "geolocations"
+
+# display correct input for the function
+geolocations_df2list
+```
+
+
+Common usage of this function might be extracting particular variables. You can extract one variable like this:
+
+```{r}
+# extract one postcode
+bulk_rev_geo[[1]]$result[[8]]$postcode
+```
+
+But more likely you will want more than one result. After all, that's the point of using a bulk function:
+
+```{r}
+# function to extract variables of interest
+extract_bulk_geo_variable <- function(x) {
+  bulk_results <- lapply(bulk_rev_geo, `[[`, "result")
+  sapply(unlist(bulk_results, recursive = FALSE), `[[`, x)
+}
+
+# define the variables you need
+variables_of_interest <- c("postcode", "latitude", "longitude")
+
+# return a data frame with the variables
+data.frame(
+  sapply(variables_of_interest, extract_bulk_geo_variable))
+```
+
+
+### Single outcode
+
+```{r}
+out_rev_geocode <- outcode_reverse_geocoding("-3.15", "51.47")
+# overview
+str(out_rev_geocode[1])
+```
+
+## Generate random entries
+
+### Postcodes
+
+Generates a list with a random UK postcode and corresponding geographic information:
+
+```{r}
+# without restrictions
+random_postcode()
+```
+
+A randomly generated postcode can also belong to a particular outcode:
+
+```{r}
+# restrict to an outcode
+random_postcode("N1")
+```
+
+## Places
+
+You can also generate a random place, specified by an OSGB code, with corresponding geographic information:
+
+```{r}
+random_place()
+```
+
+
+## Postcode validation
+
+This function can validate a UK postcode:
+
+```{r}
+postcode_validation("EC1Y 8LX") # actual UK postcode
+```
+
+
+```{r}
+postcode_validation("XYZ") # incorrect UK postcode
+```
+
+
+## Autocomplete postcodes
+
+Find the potential candidates for a postcode if you only know the beginning characters
+
+```{r}
+postcode_autocomplete("EC1")
+```
+
+It defaults to 10 candidates, but can be changed by specifying the `limit` argument. 
+
+## Find nearest postcodes or outcodes
+
+Provide a postcode to get a list of the nearest postcodes:
+
+```{r}
+near_pc <- nearest_postcode("EC1Y 8LX")
+
+#overview
+str(near_pc[1])
+```
+
+You can also use outcodes:
+
+```{r}
+near_outcode <- nearest_outcode("EC1Y")
+
+# overview
+str(near_outcode[2])
+```
+
+Or longitude and latitude
+
+```{r}
+near_ll <- nearest_outcode_lonlat(0.127, 51.507)
+
+#overview
+str(near_ll[1])
+```
+
+
+## Find places
+
+Provide a name of a place of interest. You can specify the number of results (default is 10):
+
+```{r}
+place_query_result <- place_query("Hills", limit = 11)
+
+# overview
+str(place_query_result[1])
+```
+
+You can also find a place using an OSGB code:
+
+```{r}
+place_lookup_result <- place_lookup("osgb4000000074544700")
+
+# overview
+str(place_lookup_result)
+```
+
+## Terminated postcodes
+
+You might end up having terminated postcodes in your data set. These are postcodes that are no longer active. UK postcodes can change so it's worth checking whether used postcodes are still active. If you need more information about when a particular postcode was terminated use:
+
+```{r}
+terminated_postcode("E1W 1UU")
+```
