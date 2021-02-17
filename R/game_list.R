@@ -1,13 +1,11 @@
 library(docstring)
 library(httr)
-library(jsonlite)
 library(dplyr)
 library(tibble)
-
 get_game_list <- function(n=40,page=1,api_key="",start_date="",end_date="",metacritic="",platform="",platform_count="",genre="",ordering=""){
   #' GET request to RAWG
   #'
-  #' Submit RAWG query and receive RAWG response
+  #' Submit RAWG query and receive RAWG response formatted as a data frame
   #'
   #' @importFrom httr GET
   #'
@@ -22,12 +20,11 @@ get_game_list <- function(n=40,page=1,api_key="",start_date="",end_date="",metac
   #' @param genre (str): the genre of games in the form of string or using the ID tag. Ex: "action,indie" or "4,51"
   #' @param ordering (str): how to order data, use "-" to reverse order. Ex: "name", "released", "created", "added", "updated", "rating", "-metacritic." 
   #'
-  #' @return Large list containing response from RAWG query
+  #' @return Return Data.Frame with list of games
   #'
   #' @examples 
   #' get_game_list(start_date="2000-01-01",end_date="2020-12-31",genre="1,2,3",ordering ="-added")
   #' test<-get_game_list()
-  #'
   
   #Check for insertion attacks
   if (TRUE %in% grepl("&|%",c(n,page,api_key,start_date,end_date,metacritic,platform,platform_count,genre,ordering))){
@@ -108,43 +105,13 @@ get_game_list <- function(n=40,page=1,api_key="",start_date="",end_date="",metac
   }
   
   link <- paste("https://api.rawg.io/api/games?",cleaned_n,cleaned_page,cleaned_api_key,cleaned_metacritic,cleaned_date,cleaned_metacritic,cleaned_plat,cleaned_plat_count,cleaned_genre,cleaned_order,sep="")
-  get_link <- GET(link)
-  return(get_link)
-}
-
-parse_RAWG <- function(get_object){
-  #' @title parse the GET request from RAWG 
-  #'
-  #' @description Convert the GET request from the get_game_list function into a JSON object, making the data available for extraction.
-  #'
-  #' @importFrom json fromJSON
-  #' @import docstring
-  #' 
-  #' @param get_object (list): Object returned from the GET function
-  #'
-  #' @return Returns a JSON object containing some general summary data as well as requested data
-  #'
-  #' @examples raw_data <- parse_RAWG(test)
+  get_link <- GET(link) #GET REQUEST
   
-  raw_content <- fromJSON(content(get_object,"text",encoding="UTF-8"),simplifyVector=FALSE)
+  raw_content <- fromJSON(content(get_link,"text",encoding="UTF-8"),simplifyVector=FALSE) #Converting into JSON
   
-  #Return object
-  return(raw_content)
-}
-
-extract_as.df_RAWG <- function(parse_object){
-  #' @title extract data from the RAWG JSON object
-  #'
-  #' @description Extracting the data from 'results' into a dataframe, removing certain fields such as images,screenshots, stores and tags
-  #' 
-  #' @param parse_object (list): JSON object obtained from the parse_RAWG function
-  #' 
-  #' @return Returns a dataframe containing the extracted data from the GET function
-  #' 
-  #' @examples df <- extract_as.df_RAWG(raw_data)
+  results <- (raw_content$results)
   
-  results <- (parse_object$results)
-  
+  #Cleaning and Formatting
   #Initial Run
   #Cleanup & Table values for A FIRST GAME 
   data_raw <- results[[1]]
