@@ -1,5 +1,5 @@
 library(docstring)
-extract_as.df_RAWG <- function(parse_obj){
+extract_as.df_RAWG <- function(parse_object){
   #' @title extract data from the RAWG JSON object
   #'
   #' @description Extracting the data from 'results' into a dataframe, removing certain fields such as images,screenshots, stores and tags
