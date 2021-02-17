@@ -401,3 +401,8 @@ raw_genre <- parse_RAWG(request_genre)
 df <- extract_as.df_RAWG_genre(raw_genre)
 ```
 
+```{r}
+library(usethis)
+use_description(check_name = FALSE)
+```
+
