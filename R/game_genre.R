@@ -61,5 +61,3 @@ get_genre_list<-function(api_key=""){
   #Return object
   return (final_df)
 }
-
-get_genre_list(api_key = "bb91c5797154447483ea1dda3f17574e")
