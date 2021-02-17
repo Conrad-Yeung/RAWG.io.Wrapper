@@ -24,9 +24,9 @@ get_genre_list<-function(api_key=""){
     cleaned_api_key <- paste("?key=",api_key,sep="")
   }
   
-  link <- paste("https://api.rawg.io/api/genres",api_key,sep="")
+  link <- paste("https://api.rawg.io/api/genres",cleaned_api_key,sep="")
+  print(link)
   get_link <- GET(link) #GET REQUEST
-  
   
   raw_content <- fromJSON(content(get_link,"text",encoding="UTF-8"),simplifyVector=FALSE) #FORMAT INTO JSON
   
@@ -61,3 +61,5 @@ get_genre_list<-function(api_key=""){
   #Return object
   return (final_df)
 }
+
+get_genre_list(api_key = "bb91c5797154447483ea1dda3f17574e")
