@@ -17,9 +17,9 @@ What do we need to do:
 ```{r}
 library(httr)
 library(jsonlite)
-#library(tibble)
-
-links <- GET("https://api.rawg.io/api/games?key=bb91c5797154447483ea1dda3f17574e&page_size=20&page=3")
+library(dplyr)
+library(tibble)
+links <- GET("https://api.rawg.io/api/games?page_size=5&page=1&dates=2000-01-01,2020-12-31&genre=1,2,3&ordering=-added")
 raw_content <- fromJSON(content(links,"text",encoding="UTF-8"),simplifyVector=FALSE)
 results <- (raw_content$results)
 
@@ -28,19 +28,20 @@ results <- (raw_content$results)
 data_raw <- results[[1]]
 names <- enframe(unlist(data_raw))
 temp_df <- data.frame(names)
-temp_df <- temp_df[!grepl("tags|screenshots|store|image|requirements", temp_df$name),]
+temp_df <- temp_df[!grepl("tags|screenshots|store|image|requirements|clip", temp_df$name),]
 #Create Unique Labeling - prepping for merge
 uniquify_list <- c("ratings.id","platforms.platform.id","parent_platforms.platform.id","genres.id")
 stop_list <- c("ratings.percent","platforms.released_at","parent_platforms.platform.slug","genres.games_count")
-id <- ""
+ids <- ""
 for (i in 1:length(temp_df$name)){
   if (temp_df$name[i] %in% uniquify_list){
-    id <- temp_df[i,"value"]
+    print(temp_df$name[i])
+    ids <- temp_df[i,"value"]
   }else if (temp_df$name[i] %in% stop_list){
-    temp_df$name[i]<-paste(temp_df$name[i],id,sep="")
-    id<-""
+    temp_df$name[i]<-paste(temp_df$name[i],ids,sep="")
+    ids<-""
   }
-  temp_df$name[i]<-paste(temp_df$name[i],id,sep="")
+  temp_df$name[i]<-paste(temp_df$name[i],ids,sep="")
 }
 final_df<-temp_df
 
@@ -50,19 +51,18 @@ for (entries in (2:length(results))){ #Do the same for all other N-1 games
   data_raw <- results[[entries]]
   names <- enframe(unlist(data_raw))
   temp_df <- data.frame(names)
-  temp_df <- temp_df[!grepl("tags|screenshots|store|image|requirements", temp_df$name),]
+  temp_df <- temp_df[!grepl("tags|screenshots|store|image|requirements|clip", temp_df$name),]
   
   #Create Unique Labeling - prepping for merge
-  uniquify_list <- c("ratings.id","platforms.platform.id","parent_platforms.platform.id","genres.id")
-  stop_list <- c("ratings.percent","platforms.released_at","parent_platforms.platform.slug","genres.games_count")
+  ids<-""
   for (i in 1:length(temp_df$name)){
     if (temp_df$name[i] %in% uniquify_list){
-      id <- temp_df[i,"value"]
+      ids <- temp_df[i,"value"]
     }else if (temp_df$name[i] %in% stop_list){
-      temp_df$name[i]<-paste(temp_df$name[i],id,sep="")
-      id<-""
+      temp_df$name[i]<-paste(temp_df$name[i],ids,sep="")
+      ids<-""
     }
-    temp_df$name[i]<-paste(temp_df$name[i],id,sep="")
+    temp_df$name[i]<-paste(temp_df$name[i],ids,sep="")
   }
   final_df<-full_join(final_df, temp_df, by = "name") #Joining by 'name' column
 }
@@ -73,15 +73,13 @@ colnames(final_df) <- final_df[1,]
 final_df<-final_df[-1,]
 rownames(final_df)<-NULL
 ```
-
 **Feb 16, 2021**
 -Created Notebook Repo
 -Break above down into 3 functions:
   1) Function to create link based on params & GET request : get_game_list.R
   2) Parse the request into a JSON: parse_RAWG.R
   3) Wrangle to JSON into a data frame: extract_as.df_RAWG.R
-  
-**Script: get_game_list.R**
+-All 3 functions will be in a package called game_list.R (for parsing general game info)
 ```{r}
 library(docstring)
 library(httr)
@@ -194,7 +192,6 @@ get_game_list <- function(n=40,page=1,api_key="",start_date="",end_date="",metac
 }
 ```
 -Create function to parse response into a JSON
-**Script: parse_RAWG.R**
 ```{r}
 library(docstring)
 library(jsonlite)
@@ -223,7 +220,9 @@ parse_RAWG <- function(get_object){
 **Script: extract_as.df_RAWG.R**
 ```{r}
 library(docstring)
-extract_as.df_RAWG <- function(parse_obj){
+library(dplyr)
+library(tibble)
+extract_as.df_RAWG <- function(parse_object){
   #' @title extract data from the RAWG JSON object
   #'
   #' @description Extracting the data from 'results' into a dataframe, removing certain fields such as images,screenshots, stores and tags
@@ -235,27 +234,25 @@ extract_as.df_RAWG <- function(parse_obj){
   #' @examples df <- extract_as.df_RAWG(raw_data)
   
   results <- (parse_object$results)
-
+  
   #Initial Run
   #Cleanup & Table values for A FIRST GAME 
   data_raw <- results[[1]]
   names <- enframe(unlist(data_raw))
   temp_df <- data.frame(names)
-  temp_df <- temp_df[!grepl("tags|screenshots|store|image|requirements", temp_df$name),]
-  
+  temp_df <- temp_df[!grepl("tags|screenshots|store|image|requirements|clip", temp_df$name),]
   #Create Unique Labeling - prepping for merge
   uniquify_list <- c("ratings.id","platforms.platform.id","parent_platforms.platform.id","genres.id")
   stop_list <- c("ratings.percent","platforms.released_at","parent_platforms.platform.slug","genres.games_count")
-  id <- ""
-  
+  ids <- ""
   for (i in 1:length(temp_df$name)){
     if (temp_df$name[i] %in% uniquify_list){
-      id <- temp_df[i,"value"]
+      ids <- temp_df[i,"value"]
     }else if (temp_df$name[i] %in% stop_list){
-      temp_df$name[i]<-paste(temp_df$name[i],id,sep="")
-      id<-""
+      temp_df$name[i]<-paste(temp_df$name[i],ids,sep="")
+      ids<-""
     }
-    temp_df$name[i]<-paste(temp_df$name[i],id,sep="")
+    temp_df$name[i]<-paste(temp_df$name[i],ids,sep="")
   }
   final_df<-temp_df
   
@@ -265,16 +262,18 @@ extract_as.df_RAWG <- function(parse_obj){
     data_raw <- results[[entries]]
     names <- enframe(unlist(data_raw))
     temp_df <- data.frame(names)
-    temp_df <- temp_df[!grepl("tags|screenshots|store|image|requirements", temp_df$name),]
+    temp_df <- temp_df[!grepl("tags|screenshots|store|image|requirements|clip", temp_df$name),]
     
+    #Create Unique Labeling - prepping for merge
+    ids<-"" #RESET THE LABEL AFTER EACH GAME
     for (i in 1:length(temp_df$name)){
       if (temp_df$name[i] %in% uniquify_list){
-        id <- temp_df[i,"value"]
+        ids <- temp_df[i,"value"]
       }else if (temp_df$name[i] %in% stop_list){
-        temp_df$name[i]<-paste(temp_df$name[i],id,sep="")
-        id<-""
+        temp_df$name[i]<-paste(temp_df$name[i],ids,sep="")
+        ids<-""
       }
-      temp_df$name[i]<-paste(temp_df$name[i],id,sep="")
+      temp_df$name[i]<-paste(temp_df$name[i],ids,sep="")
     }
     final_df<-full_join(final_df, temp_df, by = "name") #Joining by 'name' column
   }
@@ -289,3 +288,15 @@ extract_as.df_RAWG <- function(parse_obj){
   return(final_df)
 }
 ```
+
+```{r}
+request<- get_game_list(start_date="2000-01-01",end_date="2020-12-31",genre="1,2,3",ordering ="-added",n=4)
+parse_req <- parse_RAWG(request)
+df <- extract_as.df_RAWG(parse_req)
+
+request2 <- get_game_list()
+parse_req2 <- parse_RAWG(request2)
+df2 <- extract_as.df_RAWG(parse_req2)
+```
+
+**Feb 17, 2021**

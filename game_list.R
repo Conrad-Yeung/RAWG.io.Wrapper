@@ -1,5 +1,9 @@
 library(docstring)
 library(httr)
+library(jsonlite)
+library(dplyr)
+library(tibble)
+
 get_game_list <- function(n=40,page=1,api_key="",start_date="",end_date="",metacritic="",platform="",platform_count="",genre="",ordering=""){
   #' GET request to RAWG
   #'
@@ -20,8 +24,15 @@ get_game_list <- function(n=40,page=1,api_key="",start_date="",end_date="",metac
   #'
   #' @return Large list containing response from RAWG query
   #'
-  #' @examples get_game_list(start_date="2000-01-01",end_date="2020-12-31",genre="1,2,3",ordering ="-added")
-  #' @examples get_game_list()
+  #' @examples 
+  #' get_game_list(start_date="2000-01-01",end_date="2020-12-31",genre="1,2,3",ordering ="-added")
+  #' test<-get_game_list()
+  #'
+  
+  #Check for insertion attacks
+  if (TRUE %in% grepl("&|%",c(n,page,api_key,start_date,end_date,metacritic,platform,platform_count,genre,ordering))){
+    stop("Please do not try to mess with the GET request.")
+  }
   
   #Check n <= 40
   if (n > 40){
@@ -99,4 +110,90 @@ get_game_list <- function(n=40,page=1,api_key="",start_date="",end_date="",metac
   link <- paste("https://api.rawg.io/api/games?",cleaned_n,cleaned_page,cleaned_api_key,cleaned_metacritic,cleaned_date,cleaned_metacritic,cleaned_plat,cleaned_plat_count,cleaned_genre,cleaned_order,sep="")
   get_link <- GET(link)
   return(get_link)
+}
+
+parse_RAWG <- function(get_object){
+  #' @title parse the GET request from RAWG 
+  #'
+  #' @description Convert the GET request from the get_game_list function into a JSON object, making the data available for extraction.
+  #'
+  #' @importFrom json fromJSON
+  #' @import docstring
+  #' 
+  #' @param get_object (list): Object returned from the GET function
+  #'
+  #' @return Returns a JSON object containing some general summary data as well as requested data
+  #'
+  #' @examples raw_data <- parse_RAWG(test)
+  
+  raw_content <- fromJSON(content(get_object,"text",encoding="UTF-8"),simplifyVector=FALSE)
+  
+  #Return object
+  return(raw_content)
+}
+
+extract_as.df_RAWG <- function(parse_object){
+  #' @title extract data from the RAWG JSON object
+  #'
+  #' @description Extracting the data from 'results' into a dataframe, removing certain fields such as images,screenshots, stores and tags
+  #' 
+  #' @param parse_object (list): JSON object obtained from the parse_RAWG function
+  #' 
+  #' @return Returns a dataframe containing the extracted data from the GET function
+  #' 
+  #' @examples df <- extract_as.df_RAWG(raw_data)
+  
+  results <- (parse_object$results)
+  
+  #Initial Run
+  #Cleanup & Table values for A FIRST GAME 
+  data_raw <- results[[1]]
+  names <- enframe(unlist(data_raw))
+  temp_df <- data.frame(names)
+  temp_df <- temp_df[!grepl("tags|screenshots|store|image|requirements|clip", temp_df$name),]
+  #Create Unique Labeling - prepping for merge
+  uniquify_list <- c("ratings.id","platforms.platform.id","parent_platforms.platform.id","genres.id")
+  stop_list <- c("ratings.percent","platforms.released_at","parent_platforms.platform.slug","genres.games_count")
+  ids <- ""
+  for (i in 1:length(temp_df$name)){
+    if (temp_df$name[i] %in% uniquify_list){
+      ids <- temp_df[i,"value"]
+    }else if (temp_df$name[i] %in% stop_list){
+      temp_df$name[i]<-paste(temp_df$name[i],ids,sep="")
+      ids<-""
+    }
+    temp_df$name[i]<-paste(temp_df$name[i],ids,sep="")
+  }
+  final_df<-temp_df
+  
+  #For all other n-1 games
+  for (entries in (2:length(results))){ #Do the same for all other N-1 games 
+    #Cleanup & Table values for A SINGLE GAME 
+    data_raw <- results[[entries]]
+    names <- enframe(unlist(data_raw))
+    temp_df <- data.frame(names)
+    temp_df <- temp_df[!grepl("tags|screenshots|store|image|requirements|clip", temp_df$name),]
+    
+    #Create Unique Labeling - prepping for merge
+    ids<-"" #RESET THE LABEL AFTER EACH GAME
+    for (i in 1:length(temp_df$name)){
+      if (temp_df$name[i] %in% uniquify_list){
+        ids <- temp_df[i,"value"]
+      }else if (temp_df$name[i] %in% stop_list){
+        temp_df$name[i]<-paste(temp_df$name[i],ids,sep="")
+        ids<-""
+      }
+      temp_df$name[i]<-paste(temp_df$name[i],ids,sep="")
+    }
+    final_df<-full_join(final_df, temp_df, by = "name") #Joining by 'name' column
+  }
+  
+  #Cleaning up Data.frame
+  final_df<-t(final_df)
+  colnames(final_df) <- final_df[1,]
+  final_df<-final_df[-1,]
+  rownames(final_df)<-NULL
+  
+  #Return object
+  return(final_df)
 }
