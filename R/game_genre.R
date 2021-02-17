@@ -1,3 +1,4 @@
+library(docstring)
 library(httr)
 library(jsonlite)
 library(dplyr)
