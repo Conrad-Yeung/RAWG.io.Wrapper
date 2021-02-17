@@ -110,6 +110,7 @@ raw <- parse_RAWG(get_object)
 **Feb 17, 2021**
 - Had several issues with GitHub merging and pull requests.
 - Worked on the vignettes. Walk-through examples to work with the package.
+- Created graphs for the query results.
 
 
 

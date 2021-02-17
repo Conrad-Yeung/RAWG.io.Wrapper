@@ -27,6 +27,7 @@ devtools::install_github("Conrad-Yeung/RAWG.io.Wrapper")
 Provides a list of all the genres with a count of games available in that category.
 
 ```{r, message = FALSE, warning = FALSE}
+library(ggplot2)
 # library(RAWG.io.Wrapper)
 source("../R/game_genre.R")
 source("../R/game_list.R")
@@ -36,9 +37,22 @@ API_KEY = "95731a37dcf84a638308f6f40fb01801"    # Get you API from RAWG
 # Get a list of all genres with some stats
 genres <- get_genre_list(API_KEY)
 
-#overview
+# Overview
 str(genres)
 ```
+
+We can various insights from our query results. So not only the data frames, we can look at graphs for having an idea of trends in data.
+```{r}
+# Bar chart of the query result
+as.data.frame(genres) %>% 
+  ggplot() + aes(x=as.factor(name), y=as.integer(games_count)) + 
+  geom_bar(stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  xlab("Game Genres") +
+  ylab("Count of Games") +
+  labs(title = "Number of Games Available per Genre")
+```
+
 
 ### Lookup a general list of all games
 
