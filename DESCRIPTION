@@ -8,8 +8,8 @@ Authors@R:
            email = "conrad.yeung@hotmail.ca"),
         person(given = "Aamir",
             family = "Khan",
-            role = c("aut","cre"),
-            email = "email"))
+            role = c("aut"),
+            email = "filler"))
 Description: Extracting the information from the RAWG Vodep Games Database website. Allows access to information about a variety of games, from Ratings, Release Date, Reviews, available platforms. 
 License: MIT
 Encoding: UTF-8
