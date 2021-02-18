@@ -9,7 +9,11 @@ get_genre_list<-function(api_key=""){
   #'
   #' Submit RAWG query and receive RAWG response for game genres
   #'
-  #' @importFrom httr GET
+  #' @import docstring
+  #' @import httr
+  #' @import jsonlite
+  #' @import dplyr
+  #' @import tibble
   #'
   #' @param api_key (str): your api key (recommended - not required, default = none)
   #'

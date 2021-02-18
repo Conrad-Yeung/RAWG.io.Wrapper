@@ -8,8 +8,12 @@ get_game_list <- function(n=40,page=1,api_key="",start_date="",end_date="",metac
   #' GET request to RAWG
   #'
   #' Submit RAWG query and receive RAWG response formatted as a data frame
-  #'
-  #' @importFrom httr GET
+  #' 
+  #' @import docstring
+  #' @import httr
+  #' @import jsonlite
+  #' @import dplyr
+  #' @import tibble
   #'
   #' @param n (int): number of games/entries (default = 40). Max 40. If you want to look at entries beyond the 40th index, use the `page` parameter.
   #' @param page (int): page number queried (default = 1) 
