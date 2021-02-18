@@ -1,5 +1,3 @@
-library(RAWG.io.Wrapper)
-
 test_that("game_genre works as expected", {
   # Don't run these tests on the CRAN build servers
   skip_on_cran()
