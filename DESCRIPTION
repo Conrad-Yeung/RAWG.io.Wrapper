@@ -21,3 +21,9 @@ Imports:
     tibble
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Suggests: 
+    testthat (>= 2.0.0),
+    knitr,
+    rmarkdown
+Config/testthat/edition: 2
+VignetteBuilder: knitr

@@ -18,6 +18,11 @@ get_genre_list<-function(api_key=""){
   #' @examples 
   #' test<-get_genre_list()
   
+  #Check for insertion attacks
+  if (TRUE %in% grepl("&|%",api_key)){
+    stop("Please do not try to mess with the GET request.")
+  }
+  
   #Check if API Key is given
   if (api_key == ""){
     cleaned_api_key <- ""
@@ -27,6 +32,11 @@ get_genre_list<-function(api_key=""){
   
   link <- paste("https://api.rawg.io/api/genres",cleaned_api_key,sep="")
   get_link <- GET(link) #GET REQUEST
+  
+  #Check if it is a successful connection
+  if (get_link$status_code != 200){
+    stop("Please double check the inputted parameters (i.e. make sure your API is correct")
+  }
   
   raw_content <- fromJSON(content(get_link,"text",encoding="UTF-8"),simplifyVector=FALSE) #FORMAT INTO JSON
   
@@ -57,6 +67,7 @@ get_genre_list<-function(api_key=""){
   colnames(final_df) <- final_df[1,]
   final_df<-final_df[-1,]
   rownames(final_df)<-NULL
+  final_df<-data.frame(final_df)
   
   #Return object
   return (final_df)

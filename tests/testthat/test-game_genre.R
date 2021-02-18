@@ -1,0 +1,15 @@
+test_that("game_genre works as expected", {
+  # Don't run these tests on the CRAN build servers
+  skip_on_cran()
+  
+  #This is a simple query & should work
+  test_list <- get_genre_list()
+  expect_that(test_list, is_a("data.frame"))
+  
+  #This should throw an error (invalid API_Key)
+  expect_error(get_genre_list(api_key="NICE"))
+  
+  #This should also throw an error (can't trick a query)
+  expect_error(get_genre_list(api_key="page=10"))
+
+})

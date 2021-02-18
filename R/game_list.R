@@ -17,7 +17,7 @@ get_game_list <- function(n=40,page=1,api_key="",start_date="",end_date="",metac
   #' @param start_date (str): start release date in the form YYYY-MM-DD (default = none). Ex: "2020-01-30"
   #' @param end_date (str): end release date in the form YYYY-MM-DD (default = none). Ex: "2021-30-30"
   #' @param metacritic (str): metacritic rating range (default = none). Ex: "80,100" will give you ratings between 80 and 100.
-  #' @param platforms (str):  ID of platform (1=XboxOne, 2=Playstation, 3=Xbox, 4=PC etc.) Ex: "1" or "1,2,3" for a range of platforms.  
+  #' @param platform (str):  ID of platform (1=XboxOne, 2=Playstation, 3=Xbox, 4=PC etc.) Ex: "1" or "1,2,3" for a range of platforms.  
   #' @param platform_count (int): number of platforms games are available on. 
   #' @param genre (str): the genre of games in the form of string or using the ID tag. Ex: "action,indie" or "4,51"
   #' @param ordering (str): how to order data, use "-" to reverse order. Ex: "name", "released", "created", "added", "updated", "rating", "-metacritic." 
@@ -36,6 +36,8 @@ get_game_list <- function(n=40,page=1,api_key="",start_date="",end_date="",metac
   #Check n <= 40
   if (n > 40){
     stop("Max query length is 40. If you want to get entries beyond the 40th game, please change the `page` number. For example, entry 41-80 use `page='2'.")
+  } else if (n < 1){
+    stop("Min query length is 1.")
   } else {
     cleaned_n <- paste("page_size=",n,sep="")
   }
@@ -109,6 +111,11 @@ get_game_list <- function(n=40,page=1,api_key="",start_date="",end_date="",metac
   link <- paste("https://api.rawg.io/api/games?",cleaned_n,cleaned_page,cleaned_api_key,cleaned_metacritic,cleaned_date,cleaned_metacritic,cleaned_plat,cleaned_plat_count,cleaned_genre,cleaned_order,sep="")
   get_link <- GET(link) #GET REQUEST
   
+  #Check if it is a successful connection
+  if (get_link$status_code != 200){
+    stop("Please double check the inputted parameters (i.e. make sure your API is correct")
+  }
+  
   raw_content <- fromJSON(content(get_link,"text",encoding="UTF-8"),simplifyVector=FALSE) #Converting into JSON
   
   results <- (raw_content$results)
@@ -162,6 +169,7 @@ get_game_list <- function(n=40,page=1,api_key="",start_date="",end_date="",metac
   colnames(final_df) <- final_df[1,]
   final_df<-final_df[-1,]
   rownames(final_df)<-NULL
+  final_df<-data.frame(final_df)
   
   #Return object
   return(final_df)
