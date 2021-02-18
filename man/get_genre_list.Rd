@@ -10,7 +10,7 @@ get_genre_list(api_key = "")
 \item{api_key}{(str): your api key (recommended - not required, default = none)}
 }
 \value{
-Return Data.Frame with list of games
+Return Data.Frame with list of genres
 }
 \description{
 Submit RAWG query and receive RAWG response for game genres
