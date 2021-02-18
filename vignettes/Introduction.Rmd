@@ -18,8 +18,14 @@ RAWG.io.Wrapper is an API wrapper for rawg.io game database website. It allows a
 
 ```{r}
 if (!require("devtools")) install.packages("devtools",repos = "http://cran.us.r-project.org")
-library(devtools)
+if (!require("dplyr")) install.packages("dplyr",repos = "http://cran.us.r-project.org")
+if (!require("ggplot2")) install.packages("ggplot2",repos = "http://cran.us.r-project.org")
 install_github("Conrad-Yeung/RAWG.io.Wrapper")
+library(devtools)
+library(ggplot2)
+library(dplyr)
+library(RAWG.io.Wrapper)
+
 ``` 
 
 
@@ -28,10 +34,6 @@ install_github("Conrad-Yeung/RAWG.io.Wrapper")
 Provides a list of all the genres with a count of games available in that category.
 
 ```{r, message = FALSE, warning = FALSE}
-library(ggplot2)
-library(dplyr)
-library(RAWG.io.Wrapper)
-
 API_KEY = "95731a37dcf84a638308f6f40fb01801"    # Get you API from RAWG
 # Get a list of all genres with some stats
 genres <- get_genre_list(API_KEY)
