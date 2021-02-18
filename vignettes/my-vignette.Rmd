@@ -1,0 +1,26 @@
+---
+title: "my-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r, message = FALSE, warning = FALSE}
+if (!require("devtools")) install.packages("devtools")
+devtools::install_github("Conrad-Yeung/RAWG.io.Wrapper")
+```
+
+
+
+```{r setup}
+library(RAWG.io.Wrapper)
+```
