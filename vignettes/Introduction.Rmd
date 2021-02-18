@@ -29,15 +29,12 @@ Provides a list of all the genres with a count of games available in that catego
 ```{r, message = FALSE, warning = FALSE}
 library(ggplot2)
 library(dplyr)
-library(RAWG.io.Wrapper)
-source("../R/game_genre.R")
-source("../R/game_list.R")
-
+# library(RAWG.io.Wrapper)
+source("../R/get_game_list.R")
+source("../R/get_genre_list.R")
 API_KEY = "95731a37dcf84a638308f6f40fb01801"    # Get you API from RAWG
-
 # Get a list of all genres with some stats
 genres <- get_genre_list(API_KEY)
-
 # Overview
 str(genres)
 ```

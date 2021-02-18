@@ -1,4 +1,4 @@
 library(testthat)
 library(RAWG.io.Wrapper)
 
-devtools::test("testthat")
+devtools::test("RAWG.io.Wrapper")
