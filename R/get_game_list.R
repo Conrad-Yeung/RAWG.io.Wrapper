@@ -1,36 +1,35 @@
-library(httr)
-library(jsonlite)
-library(dplyr)
-library(tibble)
+#' GET request to RAWG
+#'
+#' Submit RAWG query and receive RAWG response formatted as a data frame
+#' 
+#' @import httr
+#' @import jsonlite
+#' @import dplyr
+#' @import tibble
+#'
+#' @param n (int): number of games/entries (default = 40). Max 40. If you want to look at entries beyond the 40th index, use the `page` parameter.
+#' @param page (int): page number queried (default = 1) 
+#' @param api_key (str): your api key (recommended - not required, default = none)
+#' @param start_date (str): start release date in the form YYYY-MM-DD (default = none). Ex: "2020-01-30"
+#' @param end_date (str): end release date in the form YYYY-MM-DD (default = none). Ex: "2021-30-30"
+#' @param metacritic (str): metacritic rating range (default = none). Ex: "80,100" will give you ratings between 80 and 100.
+#' @param platform (str):  ID of platform (1=XboxOne, 2=Playstation, 3=Xbox, 4=PC etc.) Ex: "1" or "1,2,3" for a range of platforms.  
+#' @param platform_count (int): number of platforms games are available on. 
+#' @param genre (str): the genre of games in the form of string or using the ID tag. Ex: "action,indie" or "4,51"
+#' @param ordering (str): how to order data, use "-" to reverse order. Ex: "name", "released", "created", "added", "updated", "rating", "-metacritic." 
+#'
+#' @return Return Data.Frame with list of games
+#'
+#' @export
+#'
+#' @examples 
+#' get_game_list(start_date="2000-01-01",end_date="2020-12-31",genre="1,2,3",ordering ="-added")
+#' test<-get_game_list()
+
+#Check for insertion attacks
 
 get_game_list <- function(n=40,page=1,api_key="",start_date="",end_date="",metacritic="",platform="",platform_count="",genre="",ordering=""){
-  #' GET request to RAWG
-  #'
-  #' Submit RAWG query and receive RAWG response formatted as a data frame
-  #' 
-  #' @import httr
-  #' @import jsonlite
-  #' @import dplyr
-  #' @import tibble
-  #'
-  #' @param n (int): number of games/entries (default = 40). Max 40. If you want to look at entries beyond the 40th index, use the `page` parameter.
-  #' @param page (int): page number queried (default = 1) 
-  #' @param api_key (str): your api key (recommended - not required, default = none)
-  #' @param start_date (str): start release date in the form YYYY-MM-DD (default = none). Ex: "2020-01-30"
-  #' @param end_date (str): end release date in the form YYYY-MM-DD (default = none). Ex: "2021-30-30"
-  #' @param metacritic (str): metacritic rating range (default = none). Ex: "80,100" will give you ratings between 80 and 100.
-  #' @param platform (str):  ID of platform (1=XboxOne, 2=Playstation, 3=Xbox, 4=PC etc.) Ex: "1" or "1,2,3" for a range of platforms.  
-  #' @param platform_count (int): number of platforms games are available on. 
-  #' @param genre (str): the genre of games in the form of string or using the ID tag. Ex: "action,indie" or "4,51"
-  #' @param ordering (str): how to order data, use "-" to reverse order. Ex: "name", "released", "created", "added", "updated", "rating", "-metacritic." 
-  #'
-  #' @return Return Data.Frame with list of games
-  #'
-  #' @examples 
-  #' get_game_list(start_date="2000-01-01",end_date="2020-12-31",genre="1,2,3",ordering ="-added")
-  #' test<-get_game_list()
   
-  #Check for insertion attacks
   if (TRUE %in% grepl("&|%",c(n,page,api_key,start_date,end_date,metacritic,platform,platform_count,genre,ordering))){
     stop("Please do not try to mess with the GET request.")
   }

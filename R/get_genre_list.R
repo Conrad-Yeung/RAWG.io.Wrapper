@@ -1,26 +1,25 @@
-library(httr)
-library(jsonlite)
-library(dplyr)
-library(tibble)
+#' GET request to RAWG
+#'
+#' Submit RAWG query and receive RAWG response for game genres
+#'
+#' @import httr
+#' @import jsonlite
+#' @import dplyr
+#' @import tibble
+#'
+#' @param api_key (str): your api key (recommended - not required, default = none)
+#'
+#' @return Return Data.Frame with list of genres
+#'
+#' @export
+#'
+#' @examples 
+#' test<-get_genre_list()
+
+#Check for insertion attacks
 
 get_genre_list<-function(api_key=""){
-  #' GET request to RAWG
-  #'
-  #' Submit RAWG query and receive RAWG response for game genres
-  #'
-  #' @import httr
-  #' @import jsonlite
-  #' @import dplyr
-  #' @import tibble
-  #'
-  #' @param api_key (str): your api key (recommended - not required, default = none)
-  #'
-  #' @return Return Data.Frame with list of genres
-  #'
-  #' @examples 
-  #' test<-get_genre_list()
-  
-  #Check for insertion attacks
+
   if (TRUE %in% grepl("&|%",api_key)){
     stop("Please do not try to mess with the GET request.")
   }
