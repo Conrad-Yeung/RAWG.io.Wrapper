@@ -1,0 +1,120 @@
+---
+title: "Introduction"
+author: "Aamir M. Khan / Conrad Yeung"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    smart: no
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+RAWG.io.Wrapper is an API wrapper for rawg.io game database website. It allows acquiring detailed information about different games through an easy to use query interface.
+
+## Installation
+
+```{r1 eval=, message=FALSE, warning=FALSE}
+if (!require("devtools")) install.packages("devtools")
+devtools::install_github("Conrad-Yeung/RAWG.io.Wrapper")
+``` 
+
+
+### Lookup games by genres
+
+Provides a list of all the genres with a count of games available in that category.
+
+```{r, message = FALSE, warning = FALSE}
+library(ggplot2)
+library(dplyr)
+# library(RAWG.io.Wrapper)
+source("../R/game_genre.R")
+source("../R/game_list.R")
+
+API_KEY = "95731a37dcf84a638308f6f40fb01801"    # Get you API from RAWG
+
+# Get a list of all genres with some stats
+genres <- get_genre_list(API_KEY)
+
+# Overview
+str(genres)
+```
+
+We can gain various insights from our query results. So not only the data frames, we can look at graphs for having an idea of trends in data.
+```{r}
+# Bar chart of the query result
+as.data.frame(genres) %>% 
+  transform(name=as.factor(name), games_count=as.integer(games_count)) %>%
+  ggplot() + aes(x=reorder(name, -games_count), y=games_count) +
+  geom_bar(stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  xlab("Game Genres") +
+  ylab("No. of Games") +
+  labs(title = "Number of Games Available per Genre")
+```
+
+
+### Lookup a general list of all games
+
+There is another function that returns a list of all the games and allows optional parameters to customize the search.
+
+```{r}
+# Get all the games released in the year 2020
+query_1 <- get_game_list(api_key=API_KEY,start_date="2020-01-01",end_date="2020-12-31")
+
+str(query_1)
+```
+
+```{r}
+
+# Get all the games with ratings between 80 and100
+query_2 <- get_game_list(api_key=API_KEY, metacritic="80-100")
+
+str(query_2)
+```
+
+
+We can plot a density graph of the meta-critic ratings to find out what ratings games get on the average from the critics.
+
+```{r}
+# Plotting average metacritic ratings
+as.data.frame(query_1) %>% 
+  ggplot() + aes(x=as.integer(metacritic)) +
+  geom_density() +
+  xlab("Metacritic Ratings") +
+  ylab("Density") +
+  labs(title = "Density Plot of Reviewer's Metacritic Ratings")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
