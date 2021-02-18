@@ -1,4 +1,3 @@
-library(docstring)
 library(httr)
 library(jsonlite)
 library(dplyr)
@@ -9,7 +8,6 @@ get_genre_list<-function(api_key=""){
   #'
   #' Submit RAWG query and receive RAWG response for game genres
   #'
-  #' @import docstring
   #' @import httr
   #' @import jsonlite
   #' @import dplyr
@@ -17,7 +15,7 @@ get_genre_list<-function(api_key=""){
   #'
   #' @param api_key (str): your api key (recommended - not required, default = none)
   #'
-  #' @return Return Data.Frame with list of games
+  #' @return Return Data.Frame with list of genres
   #'
   #' @examples 
   #' test<-get_genre_list()

@@ -1,4 +1,3 @@
-library(docstring)
 library(httr)
 library(jsonlite)
 library(dplyr)
@@ -9,7 +8,6 @@ get_game_list <- function(n=40,page=1,api_key="",start_date="",end_date="",metac
   #'
   #' Submit RAWG query and receive RAWG response formatted as a data frame
   #' 
-  #' @import docstring
   #' @import httr
   #' @import jsonlite
   #' @import dplyr
