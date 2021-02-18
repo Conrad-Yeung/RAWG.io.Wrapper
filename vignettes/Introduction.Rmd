@@ -17,7 +17,7 @@ RAWG.io.Wrapper is an API wrapper for rawg.io game database website. It allows a
 ## Installation
 
 ```{r}
-if (!require("devtools")) install.packages("devtools")
+if (!require("devtools")) install.packages("devtools",repos = "http://cran.us.r-project.org")
 library(devtools)
 install_github("Conrad-Yeung/RAWG.io.Wrapper")
 ``` 
