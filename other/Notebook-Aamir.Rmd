@@ -110,7 +110,14 @@ raw <- parse_RAWG(get_object)
 **Feb 17, 2021**
 - Had several issues with GitHub merging and pull requests.
 - Worked on the vignettes. Walk-through examples to work with the package.
-- Created graphs for the query results.
+- Created first graph for the query results plotting number of games count in different genres.
+
+
+**Feb 18, 2021**
+- Created second graph for the query results plotting meta-critic density curve.
+- Fixed code issue that stops travis from running
+
+
 
 
 
