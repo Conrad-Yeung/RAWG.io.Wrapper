@@ -23,11 +23,11 @@ RAWG.io.Wrapper is an API wrapper for rawg.io game database website. It allows a
 # if (!require("dplyr")) install.packages("dplyr",repos = "http://cran.us.r-project.org")
 # if (!require("devtools")) install.packages("devtools",repos = "http://cran.us.r-project.org")
 
-# library(MASS)
-# library(mgcv)
-# library(ggplot2)
-# library(dplyr)
-# library(devtools)
+library(MASS)
+library(mgcv)
+library(ggplot2)
+library(dplyr)
+library(devtools)
 install_github("Conrad-Yeung/RAWG.io.Wrapper")
 library(RAWG.io.Wrapper)
 ``` 
