@@ -17,10 +17,14 @@ RAWG.io.Wrapper is an API wrapper for rawg.io game database website. It allows a
 ## Installation
 
 ```{r}
-if (!require("devtools")) install.packages("devtools",repos = "http://cran.us.r-project.org")
-if (!require("dplyr")) install.packages("dplyr",repos = "http://cran.us.r-project.org")
+if (!require("MASS")) install.packages("MASS",repos = "http://cran.us.r-project.org")
+if (!require("mgcv")) install.packages("mgcv",repos = "http://cran.us.r-project.org")
 if (!require("ggplot2")) install.packages("ggplot2",repos = "http://cran.us.r-project.org")
+if (!require("dplyr")) install.packages("dplyr",repos = "http://cran.us.r-project.org")
+if (!require("devtools")) install.packages("devtools",repos = "http://cran.us.r-project.org")
 
+library(MASS)
+library(mgcv)
 library(ggplot2)
 library(dplyr)
 library(devtools)
