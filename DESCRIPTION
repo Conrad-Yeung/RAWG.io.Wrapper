@@ -18,7 +18,13 @@ Imports:
     httr,
     dplyr,
     jsonlite,
-    tibble
+    tibble,
+    MASS,
+    mgcv,
+    ggplot2,
+    dplyr,
+    testthat,
+    devtools
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Suggests: 
