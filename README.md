@@ -1,6 +1,8 @@
 # RawgioR
 
 [![Build Status](https://travis-ci.com/Conrad-Yeung/RAWG.io.Wrapper.svg?branch=main)](https://travis-ci.com/Conrad-Yeung/RAWG.io.Wrapper)
+[![R-CMD-check](https://github.com/Conrad-Yeung/Data534-Project-Group8/workflows/R-CMD-check/badge.svg)](https://github.com/Conrad-Yeung/Data534-Project-Group8/actions)
+
 
 This project is an API wrapper for R around www.rawg.io - the largest video game database and game discovery service. It has over 350,000+ games, search, and machine learning recommendations for 50 platforms including mobiles. This package provides an easy to use interface in R language to find and transform information about the video games using rich metadata like tags, genres, developers, publishers, individual creators, official websites, release dates or Metacritic ratings.
 
