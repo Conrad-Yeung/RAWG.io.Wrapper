@@ -115,7 +115,8 @@ raw <- parse_RAWG(get_object)
 
 **Feb 18, 2021**
 - Created second graph for the query results plotting meta-critic density curve.
-- Fixed code issue that stops travis from running
+- Fixed code issue that stops Travis from running
+- Finally found the issues that were not allowing the Travis to build. The changes to DESCRIPTION file were very important for project continuous integration.
 
 
 
