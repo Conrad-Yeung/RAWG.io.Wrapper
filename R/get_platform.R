@@ -68,8 +68,5 @@ get_platform <- function(api_key = "", ordering="", Page="", Page_size=""){
   results
 }
 
-# Test:
-key = "95731a37dcf84a638308f6f40fb01801"
-df <- get_platform(key,"1")
-df
+
 
