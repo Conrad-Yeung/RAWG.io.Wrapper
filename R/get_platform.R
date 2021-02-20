@@ -6,15 +6,25 @@
 #' @import jsonlite
 #' @import dplyr
 #' @import tibble 
+#' 
+#' @param api_key (str): your api key (recommended - not required, default = none)
+#' @param ordering (str): Which field to use when ordering the results
+#' @param Page (int): A page number within the paginated result set.
+#' @param Page_size (int): Number of results to return per page.
+#'
+#' @return Return Data.Frame with list of game platforms
+#'
+#' @export
+#'
+#' @examples 
+#' key = "95731a37dcf84a638308f6f40fb01801"
+#' p = 1
+#' p_size = 5
+#' ordering = "id"
+#' df <- get_platform(key,Page = p, Page_size = p_size, ordering)
 
-# params:
-# api_key = ""
-# ordering = ""
-# page = ""
-# page_size = ""
-
-library("httr")
-library("jsonlite")
+# library("httr")
+# library("jsonlite")
 
 get_platform <- function(api_key = "", ordering="", Page="", Page_size=""){
   #TODO: Check for insertion attacks
