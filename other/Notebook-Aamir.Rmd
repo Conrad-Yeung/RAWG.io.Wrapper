@@ -119,6 +119,18 @@ raw <- parse_RAWG(get_object)
 - Finally found the issues that were not allowing the Travis to build. The changes to DESCRIPTION file were very important for project continuous integration.
 
 
+**Feb 19, 2021**
+- Working on the publishers of the games.
+  - Extract data from API
+  - Clean data
+  - Select the desired columns
+  - Create publisher data frame
+  
+**Feb 20, 2021**
+- Created second graph for the query results plotting meta-critic density curve.
+- Fixed code issue that stops Travis from running
+- Finally found the issues that were not allowing the Travis to build. The changes to DESCRIPTION file were very important for project continuous integration.
+
 
 
 
