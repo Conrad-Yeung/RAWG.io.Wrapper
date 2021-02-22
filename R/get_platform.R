@@ -8,7 +8,7 @@
 #' @import tibble 
 #' 
 #' @param api_key (str): your api key (recommended - not required, default = none)
-#' @param ordering (str): Which field to use when ordering the results
+#' @param ordering (str): Which field to use when ordering the results("id", "added")
 #' @param Page (int): A page number within the paginated result set.
 #' @param Page_size (int): Number of results to return per page.
 #'
@@ -23,7 +23,7 @@
 #' ordering = "id"
 #' df <- get_platform(key,Page = p, Page_size = p_size, ordering)
 
-get_platform <- function(api_key = "", ordering="", Page="1", Page_size=""){
+get_platform <- function(api_key = "", ordering="added", Page="", Page_size=""){
   #TODO: Check for insertion attacks
   if (TRUE %in% grepl("&|%",c(api_key, ordering, Page, Page_size))){
     stop("Please do not try to mess with the GET request.")
@@ -33,7 +33,7 @@ get_platform <- function(api_key = "", ordering="", Page="1", Page_size=""){
   link = "https://api.rawg.io/api/platforms?"
   
   if(Page != ""){
-    link=paste(link,Page,sep="")
+    link=paste(link,Page,sep="&")
   }
   
   if(api_key != ""){
@@ -41,7 +41,7 @@ get_platform <- function(api_key = "", ordering="", Page="1", Page_size=""){
   }
   
   if(Page_size != ""){
-    link = paste(link,Page_size,sep="&")
+    link = paste(link,Page_size,sep="")
   }
   
   if(ordering != ""){
