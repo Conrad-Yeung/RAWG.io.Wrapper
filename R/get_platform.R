@@ -23,38 +23,33 @@
 #' ordering = "id"
 #' df <- get_platform(key,Page = p, Page_size = p_size, ordering)
 
-# library("httr")
-# library("jsonlite")
-
-get_platform <- function(api_key = "", ordering="", Page="", Page_size=""){
+get_platform <- function(api_key = "", ordering="", Page="1", Page_size=""){
   #TODO: Check for insertion attacks
   if (TRUE %in% grepl("&|%",c(api_key, ordering, Page, Page_size))){
     stop("Please do not try to mess with the GET request.")
   }
   
-  #TODO: clean variables:
-  cleaned_api_key="key="
-  if(api_key != ""){
-    cleaned_api_key=paste("key=",api_key,sep="")
-  }
+  #TODO: clean variables and build the link:
+  link = "https://api.rawg.io/api/platforms?"
   
-  cleaned_page="&page="
   if(Page != ""){
-    cleaned_page = paste("&page=",Page,sep="")
+    link=paste(link,Page,sep="")
   }
   
-  cleaned_page_size="&page_size="
+  if(api_key != ""){
+    link=paste(link,api_key,sep="&")
+  }
+  
   if(Page_size != ""){
-    cleaned_page_size = paste("&page_size=",Page_size, sep = "")
+    link = paste(link,Page_size,sep="&")
   }
   
-  cleaned_ordering="&ordering"
   if(ordering != ""){
-    cleaned_ordering = paste("&ordering=",ordering, sep = "")
+    link = paste(link,ordering, sep = "&")
   }
   
-  #TODO: build url:
-  link <- paste("https://api.rawg.io/api/platforms?",cleaned_api_key, cleaned_ordering, cleaned_page, cleaned_page_size)
+  # #TODO: build url:
+  # link <- paste("https://api.rawg.io/api/platforms?",cleaned_api_key, cleaned_ordering, cleaned_page, cleaned_page_size)
   
   #TODO: run query:
   get_link <- GET(link) #GET REQUEST
