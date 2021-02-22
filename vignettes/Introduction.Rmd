@@ -22,6 +22,9 @@ Library packages to be used are directly loaded in the description file and used
 ```{r}
 library(MASS)
 library(mgcv)
+library(httr)
+library(jsonlite)
+library(tibble)
 library(ggplot2)
 library(dplyr)
 library(devtools)
