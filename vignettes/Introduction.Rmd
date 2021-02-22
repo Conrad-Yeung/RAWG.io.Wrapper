@@ -104,45 +104,14 @@ str(publishers)
 ```
 
 We can gain various insights from our query results. So not only the data frames, we can look at graphs for having an idea of trends in data.
-#```{r}
-## Bar chart of the query result
-#as.data.frame(publishers) %>% 
-#  transform(name=as.factor(name), games_count=as.integer(games_count)) %>%
-#  ggplot() + aes(x=reorder(name, -games_count), y=games_count) +
-#  geom_bar(stat="identity") +
-#  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-#  xlab("Game Publishers") +
-#  ylab("No. of Games") +
-#  labs(title = "Number of Games Available per Publisher")
-#```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```{r}
+# Bar chart of the query result
+as.data.frame(publishers) %>% 
+  transform(name=as.factor(name), games_count=as.integer(games_count)) %>%
+  ggplot() + aes(x=reorder(name, -games_count), y=games_count) +
+  geom_bar(stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  xlab("Game Publishers") +
+  ylab("No. of Games") +
+  labs(title = "Number of Games Available per Publisher")
+```
