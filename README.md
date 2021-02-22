@@ -10,6 +10,7 @@ Current list of functions included in the wrapper:
 - get_game_list()  
 - get_genre_list()  
 - get_publisher_list()  
+- get_platform()
 
 We also plan to add support RAWG features like:
 - 'Where to buy' giving links to digital distribution services, 
