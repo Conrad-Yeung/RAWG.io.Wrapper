@@ -67,34 +67,7 @@ get_platform <- function(api_key = "", ordering="added", Page="", Page_size=""){
   df <- (raw_content$results)
   
   #TODO: dataframe wrangling
-  # id = c()
-  # Name = c()
-  # slug = c()
-  # count = c()
-  # image_b = c()
-  # year = c()
-  # games = c()
-  # 
-  # for(i in 1:length(df)){
-  #   id <- append(id,df[[i]]$id)
-  #   Name <- append(Name,df[[i]]$name)
-  #   slug <- append(slug, df[[i]]$slug)
-  #   count <- append(count, df[[i]]$games_count)
-  #   image_b <- append(image_b, df[[i]]$image_background)
-  #   year <- append(year, paste(df[[i]]$year_start, df[[i]]$year_end, sep = "-"))
-  #   
-  #   game_list = df[[i]]$games[[1]]$name
-  #   for(n in 2:length(df[[i]]$games)){
-  #     game_list<-paste(game_list, df[[i]]$games[[n]]$name, sep = ", ")
-  #   }
-  #   
-  #   games<-append(games, game_list)
-  # }
-  # 
-  # 
-  # df <- as.data.frame(cbind(id,Name,slug,count,image_b,year,games))
-  
-  #TODO: dataframe wrangling
+
   id = list(rep("NA"), length(df))
   Name = list(rep("NA"), length(df))
   slug = list(rep("NA"), length(df))
