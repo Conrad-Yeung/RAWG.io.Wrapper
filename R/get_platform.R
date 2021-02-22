@@ -67,6 +67,7 @@ get_platform <- function(api_key = "", ordering="added", Page="", Page_size=""){
   df <- (raw_content$results)
   
   #TODO: dataframe wrangling
+
   id = list(rep("NA"), length(df))
   Name = list(rep("NA"), length(df))
   slug = list(rep("NA"), length(df))
