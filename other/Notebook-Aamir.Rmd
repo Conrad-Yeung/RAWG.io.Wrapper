@@ -119,6 +119,18 @@ raw <- parse_RAWG(get_object)
 - Finally found the issues that were not allowing the Travis to build. The changes to DESCRIPTION file were very important for project continuous integration.
 
 
+**Feb 19, 2021**
+- Working on the publishers of the games API data.
+  - Extract data from API
+  - Clean data
+  - Select the desired columns
+  - Create publisher data frame
+  
+**Feb 20/21, 2021**
+- Added tests for the get_publisher_list() function.
+- Added relevant help in the vignette.
+- Added game publishers bar graph to the vignette using the get_publisher_list() function.
+
 
 
 

@@ -16,19 +16,19 @@ RAWG.io.Wrapper is an API wrapper for rawg.io game database website. It allows a
 
 ## Installation
 
-```{r}
-# if (!require("MASS")) install.packages("MASS",repos = "http://cran.us.r-project.org")
-# if (!require("mgcv")) install.packages("mgcv",repos = "http://cran.us.r-project.org")
-# if (!require("ggplot2")) install.packages("ggplot2",repos = "http://cran.us.r-project.org")
-# if (!require("dplyr")) install.packages("dplyr",repos = "http://cran.us.r-project.org")
-# if (!require("devtools")) install.packages("devtools",repos = "http://cran.us.r-project.org")
+Library packages to be used are directly loaded in the description file and used here by `library()` function.
 
+
+```{r}
 library(MASS)
 library(mgcv)
+library(httr)
+library(jsonlite)
+library(tibble)
 library(ggplot2)
 library(dplyr)
 library(devtools)
-install_github("Conrad-Yeung/RAWG.io.Wrapper")
+devtools::install_github("Conrad-Yeung/RAWG.io.Wrapper")
 library(RAWG.io.Wrapper)
 ``` 
 
@@ -37,7 +37,7 @@ library(RAWG.io.Wrapper)
 
 Provides a list of all the genres with a count of games available in that category.
 
-```{r, message = FALSE, warning = FALSE}
+```{r}
 API_KEY = "95731a37dcf84a638308f6f40fb01801"    # Get you API from RAWG
 # Get a list of all genres with some stats
 genres <- get_genre_list(API_KEY)
@@ -90,6 +90,31 @@ as.data.frame(query_1) %>%
   ylab("Density") +
   labs(title = "Density Plot of Reviewer's Metacritic Ratings")
 ```
+
+### Lookup games by publishers
+
+Provides a list of all the publishers with a count of games available in that category.
+
+```{r}
+API_KEY = "95731a37dcf84a638308f6f40fb01801"    # Get you API from RAWG
+# Get a list of all publisher with some stats
+publishers <- get_publisher_list(API_KEY)
+# Overview
+str(publishers)
+```
+
+We can gain various insights from our query results. So not only the data frames, we can look at graphs for having an idea of trends in data.
+#```{r}
+## Bar chart of the query result
+#as.data.frame(publishers) %>% 
+#  transform(name=as.factor(name), games_count=as.integer(games_count)) %>%
+#  ggplot() + aes(x=reorder(name, -games_count), y=games_count) +
+#  geom_bar(stat="identity") +
+#  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+#  xlab("Game Publishers") +
+#  ylab("No. of Games") +
+#  labs(title = "Number of Games Available per Publisher")
+#```
 
 
 

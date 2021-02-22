@@ -7,8 +7,9 @@
 This project is an API wrapper for R around www.rawg.io - the largest video game database and game discovery service. It has over 350,000+ games, search, and machine learning recommendations for 50 platforms including mobiles. This package provides an easy to use interface in R language to find and transform information about the video games using rich metadata like tags, genres, developers, publishers, individual creators, official websites, release dates or Metacritic ratings.
 
 Current list of functions included in the wrapper:
-- get_game_list()
-- get_genre_list()
+- get_game_list()  
+- get_genre_list()  
+- get_publisher_list()  
 
 We also plan to add support RAWG features like:
 - 'Where to buy' giving links to digital distribution services, 
@@ -46,5 +47,5 @@ Check the [vignette](https://github.com/Conrad-Yeung/RAWG.io.Wrapper/blob/main/v
 
 
 ## Code of Conduct
-Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms.
+Please note that this project is released with a [Contributor Code of Conduct](https://github.com/Conrad-Yeung/RAWG.io.Wrapper/blob/main/CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
