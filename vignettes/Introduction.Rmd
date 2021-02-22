@@ -28,7 +28,7 @@ library(tibble)
 library(ggplot2)
 library(dplyr)
 library(devtools)
-install_github("Conrad-Yeung/RAWG.io.Wrapper")
+devtools::install_github("Conrad-Yeung/RAWG.io.Wrapper")
 library(RAWG.io.Wrapper)
 ``` 
 
@@ -37,7 +37,7 @@ library(RAWG.io.Wrapper)
 
 Provides a list of all the genres with a count of games available in that category.
 
-```{r, message = FALSE, warning = FALSE}
+```{r}
 API_KEY = "95731a37dcf84a638308f6f40fb01801"    # Get you API from RAWG
 # Get a list of all genres with some stats
 genres <- get_genre_list(API_KEY)
@@ -95,7 +95,7 @@ as.data.frame(query_1) %>%
 
 Provides a list of all the publishers with a count of games available in that category.
 
-```{r, message = FALSE, warning = FALSE}
+```{r}
 API_KEY = "95731a37dcf84a638308f6f40fb01801"    # Get you API from RAWG
 # Get a list of all publisher with some stats
 publishers <- get_publisher_list(API_KEY)
