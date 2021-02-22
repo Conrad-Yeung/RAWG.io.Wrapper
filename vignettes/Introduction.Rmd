@@ -1,6 +1,6 @@
 ---
 title: "Introduction"
-author: "Aamir M. Khan / Conrad Yeung"
+author: "Aamir M. Khan / Conrad Yeung / Bohan Gao"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
@@ -114,4 +114,27 @@ as.data.frame(publishers) %>%
   xlab("Game Publishers") +
   ylab("No. of Games") +
   labs(title = "Number of Games Available per Publisher")
+```
+
+### List all Platforms and their game counts
+```{r}
+platform<-get_platform()
+head(platform)
+```
+```{r}
+platform
+```
+
+Check the summary of the data.
+```{r}
+summary(platform)
+```
+Visualization: Although there are more and more platforms, it seems like most of the game developers will always launch their games on PC.  
+```{r}
+ggplot(platform)+
+    aes(x=reorder(Name,-as.integer(count)), y=as.integer(count))+
+    geom_col()+
+    xlab("Platforms")+
+    ylab("Count")+
+    theme(axis.text.x = element_text(angle = 90))
 ```
