@@ -18,7 +18,7 @@
 
 #Check for insertion attacks
 
-get_genre_list<-function(api_key=""){
+get_publisher_list<-function(api_key=""){
 
   if (TRUE %in% grepl("&|%",api_key)){
     stop("Please do not try to mess with the GET request.")
@@ -52,7 +52,7 @@ get_genre_list<-function(api_key=""){
   temp_df <- filter(temp_df,!temp_df$name %in% c("games.id","games.slug","games.name","games.added","image_background","following"))
   final_df <- temp_df
   
-  for (entries in (2:length(results))){ #Do the same for all other N-1 games 
+  for (entries in (2:length(results))){ #Do the same for all other N-1 publishers 
     #Cleanup & Table values for A SINGLE PUBLISHER 
     data_raw <- results[[entries]]
     names <- enframe(unlist(data_raw))
