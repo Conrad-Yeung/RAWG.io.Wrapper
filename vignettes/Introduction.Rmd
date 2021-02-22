@@ -95,13 +95,13 @@ as.data.frame(query_1) %>%
 
 Provides a list of all the publishers with a count of games available in that category.
 
-#```{r}
-#API_KEY = "95731a37dcf84a638308f6f40fb01801"    # Get you API from RAWG
-## Get a list of all publisher with some stats
-#publishers <- get_publisher_list(API_KEY)
-## Overview
-#str(publishers)
-#```
+```{r}
+API_KEY = "95731a37dcf84a638308f6f40fb01801"    # Get you API from RAWG
+# Get a list of all publisher with some stats
+publishers <- get_publisher_list(API_KEY)
+# Overview
+str(publishers)
+```
 
 We can gain various insights from our query results. So not only the data frames, we can look at graphs for having an idea of trends in data.
 #```{r}
