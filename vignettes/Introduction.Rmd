@@ -95,26 +95,26 @@ as.data.frame(query_1) %>%
 
 Provides a list of all the publishers with a count of games available in that category.
 
-```{r}
-API_KEY = "95731a37dcf84a638308f6f40fb01801"    # Get you API from RAWG
-# Get a list of all publisher with some stats
-publishers <- get_publisher_list(API_KEY)
-# Overview
-str(publishers)
-```
+#```{r}
+#API_KEY = "95731a37dcf84a638308f6f40fb01801"    # Get you API from RAWG
+## Get a list of all publisher with some stats
+#publishers <- get_publisher_list(API_KEY)
+## Overview
+#str(publishers)
+#```
 
 We can gain various insights from our query results. So not only the data frames, we can look at graphs for having an idea of trends in data.
-```{r}
-# Bar chart of the query result
-as.data.frame(publishers) %>% 
-  transform(name=as.factor(name), games_count=as.integer(games_count)) %>%
-  ggplot() + aes(x=reorder(name, -games_count), y=games_count) +
-  geom_bar(stat="identity") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-  xlab("Game Publishers") +
-  ylab("No. of Games") +
-  labs(title = "Number of Games Available per Publisher")
-```
+#```{r}
+## Bar chart of the query result
+#as.data.frame(publishers) %>% 
+#  transform(name=as.factor(name), games_count=as.integer(games_count)) %>%
+#  ggplot() + aes(x=reorder(name, -games_count), y=games_count) +
+#  geom_bar(stat="identity") +
+#  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+#  xlab("Game Publishers") +
+#  ylab("No. of Games") +
+#  labs(title = "Number of Games Available per Publisher")
+#```
 
 
 
