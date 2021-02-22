@@ -2,6 +2,7 @@
 
 export(get_game_list)
 export(get_genre_list)
+export(get_publisher_list)
 import(dplyr)
 import(httr)
 import(jsonlite)
